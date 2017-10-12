@@ -15,9 +15,34 @@ namespace MovieArchive.Controllers
         private MovieDBContext db = new MovieDBContext();
 
         // GET: Movies
-        public ActionResult Index()
+        public ActionResult Index(string movieGenre, string searchString)
         {
-            return View(db.Movies.ToList());
+            // Build Search box
+            var movies = (from m in db.Movies
+                         select m);
+
+            // Build dropdown list
+            var genreList = new List<string>();
+            var genreQuery = from m in db.Movies
+                             orderby m.Genre
+                             select m.Genre;
+
+            genreList.AddRange(genreQuery.Distinct());
+            ViewBag.movieGenre = new SelectList(genreList);
+
+            // Using the search box
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                movies = movies.OrderBy(m => m.ReleaseDate).Where(m => m.Title.Contains(searchString));
+            }
+
+            // Using the dropdown list
+            if (!String.IsNullOrEmpty(movieGenre))
+            {
+                movies = movies.OrderBy(m => m.ReleaseDate).Where(m => m.Genre == movieGenre);
+            }
+
+            return View(movies);
         }
 
         // GET: Movies/Details/5
