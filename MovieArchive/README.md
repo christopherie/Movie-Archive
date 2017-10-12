@@ -1,0 +1,1 @@
+﻿This application is developed with Entity Framework Code First approach.
