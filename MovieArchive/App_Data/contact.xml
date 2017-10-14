@@ -1,0 +1,15 @@
+<?xml version="1.0" standalone="yes"?>
+<contacts>
+  <comment>
+    <email>c@gmail.com</email>
+    <name>Christopher Govender</name>
+    <description>This is a test</description>
+    <timestamp>14/10/2017 16:18:45</timestamp>
+  </comment>
+  <comment>
+    <email>c@gmail.com</email>
+    <name>Christopher Govender</name>
+    <description>This is a test</description>
+    <timestamp>14/10/2017 16:19:37</timestamp>
+  </comment>
+</contacts>
