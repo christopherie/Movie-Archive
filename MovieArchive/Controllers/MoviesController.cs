@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MovieArchive.Models;
+using PagedList;
 
 namespace MovieArchive.Controllers
 {
@@ -15,8 +16,21 @@ namespace MovieArchive.Controllers
         private MovieDBContext db = new MovieDBContext();
 
         // GET: Movies
-        public ActionResult Index(string movieGenre, string searchString)
+        public ActionResult Index(string sortOrder, string currentFilter, string movieGenre, string searchString, int? page)
         {
+            // Build the paging
+            ViewBag.CurrentSort = sortOrder;
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.Currentfilter = searchString;
+
             // Build Search box
             var movies = (from m in db.Movies
                          select m);
@@ -42,7 +56,15 @@ namespace MovieArchive.Controllers
                 movies = movies.OrderBy(m => m.ReleaseDate).Where(m => m.Genre == movieGenre);
             }
 
-            return View(movies);
+            // Pagination
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+
+            /*
+             * The .ToPageList() method uses .Skip() and .Take() 
+             * so it must be passed an ordered collection first.
+             */
+            return View(movies.OrderBy(i => i.ReleaseDate).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Movies/Details/5

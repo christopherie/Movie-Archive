@@ -1,4 +1,6 @@
-﻿@model IEnumerable<MovieArchive.Models.Movie>
+﻿@*@model IEnumerable<MovieArchive.Models.Movie>*@
+@model PagedList.IPagedList<MovieArchive.Models.Movie>
+@using PagedList.Mvc
 
 @{
     ViewBag.Title = "Index";
@@ -13,32 +15,32 @@
     {
         <p>
             Genre: @Html.DropDownList("movieGenre", "All")
-            Title: @Html.TextBox("searchString")
-            <input type="submit" name="submit" class="btn btn-info" value="Filter" />
+            Title: @Html.TextBox("searchString", ViewBag.CurrentFilter as string)
+            <input type="submit" name="submit" class="btn btn-primary" value="Filter" />
         </p>
     }
 </p>
 <table class="table" style="table-layout: fixed; width: 100%">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReleaseDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Genre)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Rating)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Review)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </th>
-        <th></th>
+    <th>
+        @Html.DisplayName("Title")
+    </th>
+    <th>
+        @Html.DisplayName("Release Date")
+    </th>
+    <th>
+        @Html.DisplayName("Genre")
+    </th>
+    <th>
+        @Html.DisplayName("Rating")
+    </th>
+    <th>
+        @Html.DisplayName("Review")
+    </th>
+    <th>
+        @Html.DisplayName("ImageUrl")
+    </th>
+    <th></th>
     </tr>
 
 @foreach (var item in Model) {
@@ -70,3 +72,8 @@
 }
 
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

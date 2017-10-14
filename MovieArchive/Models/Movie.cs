@@ -28,6 +28,9 @@ namespace MovieArchive.Models
         [DataType(DataType.MultilineText)]
         public string Review { get; set; }
 
+        /*
+         * Consider using url shortening as urls will be extremely long
+         */ 
         [DataType(DataType.ImageUrl)]
         [Display(Name = "Image Url")]
         public string ImageUrl { get; set; }
